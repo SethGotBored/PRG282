@@ -6,10 +6,23 @@ using System.Linq;
 
 namespace PRG2782_Project_2026 // IMPORTANT: Change this to match your project's namespace!
 {
+    public class SummaryResult
+    {
+        public int Total { get; set; }
+        public string AvgAge { get; set; }
+        public string AvgScore { get; set; }
+        public int Critical { get; set; }
+        public int Serious { get; set; }
+        public int Stable { get; set; }
+        public int Recovering { get; set; }
+        public int ReleaseReady { get; set; }
+    }
+
     public static class SummaryService
     {
-        public static string Calculate(string filePath)
+        public static SummaryResult Calculate(string filePath)
         {
+            var result = new SummaryResult();
             List<Animal> animals = new List<Animal>();
 
             try
@@ -19,7 +32,6 @@ namespace PRG2782_Project_2026 // IMPORTANT: Change this to match your project's
                     string[] lines = File.ReadAllLines(filePath);
                     foreach (string line in lines)
                     {
-                        // Split by comma (assuming standard format). Skip malformed lines.
                         string[] parts = line.Split(',');
                         if (parts.Length == 6)
                         {
@@ -42,44 +54,43 @@ namespace PRG2782_Project_2026 // IMPORTANT: Change this to match your project's
             }
             catch (Exception ex)
             {
-                return FileErrorHelper.GetFriendlyErrorMessage(ex);
+                // If there's a file error, we'll return empty results
+                return result;
             }
 
             // Calculate values
-            int total = animals.Count;
-            double avgAge = total > 0 ? animals.Average(a => a.Age) : 0;
-            double avgScore = total > 0 ? animals.Average(a => a.RecoveryScore) : 0;
+            result.Total = animals.Count;
+            result.AvgAge = result.Total > 0 ? animals.Average(a => a.Age).ToString("F2", CultureInfo.InvariantCulture) : "N/A";
+            result.AvgScore = result.Total > 0 ? animals.Average(a => a.RecoveryScore).ToString("F2", CultureInfo.InvariantCulture) : "N/A";
 
-            int critical = animals.Count(a => a.Status == "Critical");
-            int serious = animals.Count(a => a.Status == "Serious");
-            int stable = animals.Count(a => a.Status == "Stable");
-            int recovering = animals.Count(a => a.Status == "Recovering");
-            int releaseReady = animals.Count(a => a.Status == "Release-Ready");
+            result.Critical = animals.Count(a => a.Status == "Critical");
+            result.Serious = animals.Count(a => a.Status == "Serious");
+            result.Stable = animals.Count(a => a.Status == "Stable");
+            result.Recovering = animals.Count(a => a.Status == "Recovering");
+            result.ReleaseReady = animals.Count(a => a.Status == "Release-Ready");
 
-            // Build the report string
-            string report = "";
-            report += "Summary Report\n";
-            report += "==============\n";
-            report += "Total animals".PadRight(26) + total + "\n";
-            report += "Average age (years)".PadRight(26) + (total > 0 ? avgAge.ToString("F2", CultureInfo.InvariantCulture) : "N/A") + "\n";
-            report += "Average recovery score".PadRight(26) + (total > 0 ? avgScore.ToString("F2", CultureInfo.InvariantCulture) : "N/A") + "\n";
-            report += "Critical".PadRight(26) + critical + "\n";
-            report += "Serious".PadRight(26) + serious + "\n";
-            report += "Stable".PadRight(26) + stable + "\n";
-            report += "Recovering".PadRight(26) + recovering + "\n";
-            report += "Release-Ready".PadRight(26) + releaseReady + "\n";
+            // Build the report string and save to summary.txt
+            string report = "Summary Report\n==============\n";
+            report += "Total animals".PadRight(26) + result.Total + "\n";
+            report += "Average age (years)".PadRight(26) + result.AvgAge + "\n";
+            report += "Average recovery score".PadRight(26) + result.AvgScore + "\n";
+            report += "Critical".PadRight(26) + result.Critical + "\n";
+            report += "Serious".PadRight(26) + result.Serious + "\n";
+            report += "Stable".PadRight(26) + result.Stable + "\n";
+            report += "Recovering".PadRight(26) + result.Recovering + "\n";
+            report += "Release-Ready".PadRight(26) + result.ReleaseReady + "\n";
 
-            // Save to file
             try
             {
                 File.WriteAllText("summary.txt", report);
             }
             catch (Exception ex)
             {
-                return FileErrorHelper.GetFriendlyErrorMessage(ex) + " (Could not save summary.txt)";
+                // If we can't write the file, we still want the UI to show the results
+                System.Windows.Forms.MessageBox.Show(FileErrorHelper.GetFriendlyErrorMessage(ex), "File Error");
             }
 
-            return report; // Return the string so the UI can display it in labels
+            return result;
         }
     }
 }
