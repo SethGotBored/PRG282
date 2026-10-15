@@ -37,5 +37,10 @@ namespace PRG2782_Project_2026
             lblRecoveringValue.Text = result.Recovering.ToString();
             lblReleaseReadyValue.Text = result.ReleaseReady.ToString();
         }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
