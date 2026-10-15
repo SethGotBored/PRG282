@@ -15,6 +15,7 @@ namespace PRG2782_Project_2026
         public Form1()
         {
             InitializeComponent();
+            BuildSummaryControls();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,6 +42,27 @@ namespace PRG2782_Project_2026
         private void Form1_Load_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void BuildSummaryControls()
+        {
+            string[] captions = { "Total animals", "Average age (years)", "Average recovery score", "Critical", "Serious", "Stable", "Recovering", "Release-Ready" };
+            Label[] valueLabels = { lblTotalValue, lblAverageAgeValue, lblAverageScoreValue, lblCriticalValue, lblSeriousValue, lblStableValue, lblRecoveringValue, lblReleaseReadyValue };
+
+            for (int i = 0; i < 8; i++)
+            {
+                // Caption Label
+                Label caption = new Label();
+                caption.Location = new Point(20, 70 + (i * 30));
+                caption.Size = new Size(160, 20);
+                caption.Text = captions[i];
+                this.Controls.Add(caption);
+
+                // Value Label
+                valueLabels[i].Location = new Point(190, 70 + (i * 30));
+                valueLabels[i].Size = new Size(100, 20);
+                this.Controls.Add(valueLabels[i]);
+            }
         }
     }
 }

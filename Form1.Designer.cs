@@ -36,25 +36,15 @@
             this.btnGenerateSummary.UseVisualStyleBackColor = true;
             this.btnGenerateSummary.Click += new System.EventHandler(this.btnGenerateSummary_Click);
 
-            // Caption and Value Labels
-            string[] captions = { "Total animals", "Average age (years)", "Average recovery score", "Critical", "Serious", "Stable", "Recovering", "Release-Ready" };
-            System.Windows.Forms.Label[] valueLabels = { this.lblTotalValue, this.lblAverageAgeValue, this.lblAverageScoreValue, this.lblCriticalValue, this.lblSeriousValue, this.lblStableValue, this.lblRecoveringValue, this.lblReleaseReadyValue };
-
-            for (int i = 0; i < 8; i++)
-            {
-                // Caption Label
-                System.Windows.Forms.Label caption = new System.Windows.Forms.Label();
-                caption.Location = new System.Drawing.Point(20, 70 + (i * 30));
-                caption.Size = new System.Drawing.Size(160, 20);
-                caption.Text = captions[i];
-                this.Controls.Add(caption);
-
-                // Value Label
-                valueLabels[i].Location = new System.Drawing.Point(190, 70 + (i * 30));
-                valueLabels[i].Size = new System.Drawing.Size(100, 20);
-                valueLabels[i].Text = "0";
-                this.Controls.Add(valueLabels[i]);
-            }
+            // Set default "0" text for value labels
+            this.lblTotalValue.Text = "0";
+            this.lblAverageAgeValue.Text = "0";
+            this.lblAverageScoreValue.Text = "0";
+            this.lblCriticalValue.Text = "0";
+            this.lblSeriousValue.Text = "0";
+            this.lblStableValue.Text = "0";
+            this.lblRecoveringValue.Text = "0";
+            this.lblReleaseReadyValue.Text = "0";
 
             // Form1 Setup
             this.ClientSize = new System.Drawing.Size(340, 350);
